@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mariage – Salomé & Salomon</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #fdf9f5;
+    --bx:      #7a1030;   /* bordeaux principal */
+    --bx-dark: #540b20;   /* bordeaux foncé */
+    --bx-light:#b05070;   /* bordeaux clair / rose */
+    --bx-pale: #f5eaed;   /* fond rosé très pale */
+    --text:     #2e1a22;
+    --text-light:#7a5560;
+    --white:    #ffffff;
+    --marble:   #faf4f6;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Cormorant Garamond', serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+
+  /* ── SPLASH ── */
+  #splash {
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--cream);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    overflow: hidden;
+  }
+  #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .splash-floral-frame {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain; object-position: center;
+    pointer-events: none;
+    opacity: 0;
+    animation: floralIn 1.4s ease 0.2s forwards;
+  }
+  @keyframes floralIn { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: scale(1); } }
+
+  .splash-content {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    padding: 60px 30px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s both;
+  }
+  .splash-photo-frame {
+    width: 140px; height: 180px;
+    border-radius: 70px 70px 6px 6px;
+    overflow: hidden;
+    border: 3px solid var(--bx-light);
+    box-shadow: 0 8px 32px rgba(122,16,48,0.18);
+    margin-bottom: 8px;
+  }
+  .splash-photo-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+
+  /* Logo SS image sur le splash */
+  .splash-logo-img {
+    width: 80px; height: 80px;
+    object-fit: contain;
+    opacity: 0.92;
+    filter: drop-shadow(0 2px 6px rgba(122,16,48,0.15));
+  }
+
+  .splash-names { font-family: 'Great Vibes', cursive; font-size: 2.8rem; color: var(--bx-dark); text-align: center; line-height: 1.1; }
+  .countdown-wrapper { display: flex; gap: 18px; margin: 10px 0; }
+  .countdown-item { display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+  .countdown-digits { font-size: 1.4rem; font-weight: 600; color: var(--text); line-height: 1; }
+  .countdown-label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); margin-top: 3px; }
+  .see-btn {
+    margin-top: 8px; padding: 13px 36px;
+    background: var(--bx); color: var(--white);
+    font-family: 'Cormorant Garamond', serif; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    border: none; cursor: pointer; border-radius: 2px;
+    box-shadow: 0 4px 16px rgba(122,16,48,0.28);
+    transition: background 0.2s, transform 0.15s;
+  }
+  .see-btn:hover { background: var(--bx-dark); transform: translateY(-1px); }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,249,245,0.96); backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(122,16,48,0.14);
+    padding: 12px 20px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo-img { height: 36px; width: auto; object-fit: contain; }
+  .nav-links { display: flex; gap: 0; list-style: none; overflow-x: auto; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { display: block; padding: 6px 10px; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-light); text-decoration: none; white-space: nowrap; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--bx); }
+
+  /* ── SECTIONS ── */
+  .section { padding: 64px 24px; position: relative; overflow: hidden; }
+  .marble-bg {
+    background-color: var(--marble);
+    background-image:
+      repeating-linear-gradient(120deg, transparent, transparent 40px, rgba(122,16,48,0.025) 40px, rgba(122,16,48,0.025) 42px),
+      repeating-linear-gradient(60deg, transparent, transparent 60px, rgba(160,100,120,0.018) 60px, rgba(160,100,120,0.018) 62px);
+  }
+
+  /* Photo pleine largeur, intégrale, pas de zoom */
+  .photo-divider { width: 100%; position: relative; overflow: hidden; }
+  .photo-divider img { width: 100%; height: auto; display: block; object-fit: contain; }
+  .photo-divider::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40px; background: linear-gradient(var(--marble), transparent); z-index: 1; pointer-events: none; }
+  .photo-divider::after  { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(transparent, var(--marble)); z-index: 1; pointer-events: none; }
+
+  .section-inner { max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+
+  /* Logo SS dans chaque section */
+  .section-logo-img { width: 52px; height: 52px; object-fit: contain; opacity: 0.85; }
+
+  .section-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.8rem; /* plus grand pour éviter la coupure */
+    color: var(--bx-dark); line-height: 1.15;
+    white-space: nowrap; /* ne jamais couper sur une ligne */
+  }
+  /* Sur très petit écran, autoriser le wrap mais jamais mid-word */
+  @media (max-width: 360px) {
+    .section-title { font-size: 2.2rem; white-space: normal; word-break: keep-all; }
+  }
+
+  .hebrew-text { font-size: 1.15rem; color: var(--text-light); direction: rtl; line-height: 1.8; }
+  .family-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; width: 100%; font-size: 1.0rem; color: var(--text-light); font-style: italic; line-height: 1.4; }
+  .family-full { grid-column: 1/-1; }
+  .couple-names { display: flex; align-items: flex-end; gap: 16px; justify-content: center; width: 100%; flex-wrap: wrap; }
+  .bride-name, .groom-name { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .big-name { font-family: 'Great Vibes', cursive; font-size: 2.6rem; color: var(--bx-dark); line-height: 1; }
+  .hebrew-name { font-size: 0.9rem; color: var(--text-light); direction: rtl; }
+  .amp-symbol { font-family: 'Great Vibes', cursive; font-size: 2rem; color: var(--bx); padding-bottom: 8px; }
+  .body-text { font-size: 1.1rem; color: var(--text-light); line-height: 1.7; }
+  .body-text strong { color: var(--text); font-weight: 600; display: block; }
+  .gold-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--bx-light), transparent); margin: 4px auto; }
+
+  /* Boutons */
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 28px; background: var(--bx); color: var(--white); font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; border-radius: 2px; border: none; box-shadow: 0 4px 14px rgba(122,16,48,0.25); transition: background 0.2s, transform 0.15s, box-shadow 0.2s; cursor: pointer; }
+  .btn-primary:hover { background: var(--bx-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(122,16,48,0.32); }
+  .btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 26px; background: transparent; color: var(--bx-dark); font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; border-radius: 2px; border: 1px solid rgba(122,16,48,0.5); transition: background 0.2s, color 0.2s; cursor: pointer; }
+  .btn-outline:hover { background: var(--bx); color: var(--white); border-color: var(--bx); }
+  .btn-row { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; align-items: stretch; }
+
+  /* ── FORM ── */
+  .form-section { background: var(--white); }
+  .form-wrapper { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 14px; }
+  .form-input { width: 100%; padding: 12px 0 8px; border: none; border-bottom: 1px solid rgba(122,16,48,0.2); background: transparent; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--text); outline: none; transition: border-color 0.2s; }
+  .form-input::placeholder { color: rgba(122,16,48,0.35); }
+  .form-input:focus { border-color: var(--bx); }
+  .checkbox-group { display: flex; flex-direction: column; gap: 12px; }
+  .checkbox-item { display: flex; flex-direction: column; gap: 6px; }
+  .checkbox-label { display: flex; align-items: center; gap: 10px; font-size: 1.05rem; color: var(--text); cursor: pointer; }
+  .checkbox-label input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--bx); cursor: pointer; }
+  .form-input-sm { padding: 8px 0 6px; border: none; border-bottom: 1px solid rgba(122,16,48,0.15); background: transparent; font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--text); outline: none; transition: border-color 0.2s; margin-left: 26px; width: calc(100% - 26px); }
+  .form-input-sm::placeholder { color: rgba(122,16,48,0.28); }
+  .form-input-sm:focus { border-color: var(--bx); }
+  .form-textarea { width: 100%; padding: 10px 0; border: none; border-bottom: 1px solid rgba(122,16,48,0.2); background: transparent; font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--text); outline: none; resize: none; transition: border-color 0.2s; }
+  .form-textarea::placeholder { color: rgba(122,16,48,0.28); }
+  .form-textarea:focus { border-color: var(--bx); }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  footer { background: var(--cream); border-top: 1px solid rgba(122,16,48,0.12); padding: 28px 24px; text-align: center; }
+  .footer-names { font-family: 'Great Vibes', cursive; font-size: 1.6rem; color: var(--bx-dark); margin-bottom: 10px; }
+  .footer-text { font-size: 0.8rem; letter-spacing: 0.1em; color: var(--text-light); text-transform: uppercase; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.85s ease, transform 0.85s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  .anim-child-1,.anim-child-2,.anim-child-3,.anim-child-4,.anim-child-5,.anim-child-6 { opacity: 0; }
+  .reveal.visible .anim-child-1 { animation: fadeUp 0.7s ease 0.05s both; }
+  .reveal.visible .anim-child-2 { animation: fadeUp 0.7s ease 0.18s both; }
+  .reveal.visible .anim-child-3 { animation: fadeUp 0.7s ease 0.30s both; }
+  .reveal.visible .anim-child-4 { animation: fadeUp 0.7s ease 0.44s both; }
+  .reveal.visible .anim-child-5 { animation: fadeUp 0.7s ease 0.58s both; }
+  .reveal.visible .anim-child-6 { animation: fadeUp 0.7s ease 0.72s both; }
+
+  /* Shimmer sur les titres */
+  .shimmer-title {
+    background: linear-gradient(90deg, var(--bx-dark) 20%, var(--bx-light) 50%, var(--bx-dark) 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .reveal.visible .shimmer-title {
+    animation: fadeUp 0.7s ease 0.18s both, shimmer 2.5s ease 0.8s 1 forwards;
+  }
+
+  /* Anneaux pulsants */
+  .pulse-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .pulse-ring {
+    position: absolute; border-radius: 50%; border: 1px solid rgba(122,16,48,0.1);
+    top: 50%; left: 50%; width: 280px; height: 280px;
+    transform: translate(-50%,-50%);
+    animation: pulseRing 5s ease-out infinite;
+  }
+  .pulse-ring:nth-child(2) { animation-delay: 1.7s; }
+  .pulse-ring:nth-child(3) { animation-delay: 3.4s; }
+  @keyframes pulseRing { 0%{transform:translate(-50%,-50%) scale(0.5);opacity:0.6} 100%{transform:translate(-50%,-50%) scale(2.8);opacity:0} }
+
+  /* Lecteur audio discret */
+  #audio-bar {
+    position: fixed; bottom: 16px; right: 16px; z-index: 200;
+    display: none;
+    align-items: center; gap: 10px;
+    background: rgba(84,11,32,0.88); backdrop-filter: blur(6px);
+    padding: 8px 14px; border-radius: 30px;
+    color: #fff; font-size: 0.7rem; letter-spacing: 0.1em;
+    box-shadow: 0 4px 16px rgba(84,11,32,0.3);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  #audio-bar:hover { background: rgba(122,16,48,0.95); }
+  #audio-bar svg { flex-shrink: 0; }
+
+  @media (max-width: 500px) {
+    .splash-names { font-size: 2.2rem; }
+    .big-name { font-size: 2.1rem; }
+    nav { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Audio (silencieux au chargement) -->
+<audio id="bg-music" loop preload="none">
+  <source src="musique.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Barre audio flottante -->
+<div id="audio-bar" onclick="toggleMusic()" title="Musique">
+  <svg id="audio-icon-play"  width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+  <svg id="audio-icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+  <span id="audio-label">Musique</span>
+</div>
+
+<!-- ══ SPLASH ══ -->
+<div id="splash">
+  <img class="splash-floral-frame" src="fleur1.png" alt="">
+  <div class="splash-content">
+    <div class="splash-photo-frame">
+      <img src="photo.jpeg" alt="Salomé &amp; Salomon">
+    </div>
+    <img class="splash-logo-img" src="logo.png" alt="SS">
+    <div class="splash-names">Salomé &amp; Salomon</div>
+    <div class="countdown-wrapper">
+      <div class="countdown-item"><span class="countdown-digits" id="cd">–</span><span class="countdown-label">Jours</span></div>
+      <div class="countdown-item"><span class="countdown-digits" id="ch">–</span><span class="countdown-label">Hrs</span></div>
+      <div class="countdown-item"><span class="countdown-digits" id="cm">–</span><span class="countdown-label">Min</span></div>
+      <div class="countdown-item"><span class="countdown-digits" id="cs">–</span><span class="countdown-label">Sec</span></div>
+    </div>
+    <button class="see-btn" onclick="openInvitation()">Voir l'invitation</button>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav id="main-nav" style="display:none">
+  <img class="nav-logo-img" src="logo.jpeg" alt="SS">
+  <ul class="nav-links">
+    <li><a href="#mairie">Mairie</a></li>
+    <li><a href="#after">After</a></li>
+    <li><a href="#houppa">Houppa</a></li>
+    <li><a href="#shabbat">Chabbat</a></li>
+    <li><a href="#reponse">Réponse</a></li>
+  </ul>
+</nav>
+
+<!-- ══ MAIRIE ══ -->
+<section class="section marble-bg" id="mairie">
+  <div class="pulse-wrap"><div class="pulse-ring"></div><div class="pulse-ring"></div><div class="pulse-ring"></div></div>
+  <div class="section-inner reveal">
+    <h2 class="section-title shimmer-title anim-child-1">La Mairie</h2>
+    <div class="gold-divider anim-child-2"></div>
+    <p class="anim-child-3" style="font-family:'Great Vibes',cursive;font-size:1.6rem;color:var(--bx-dark)">Salomé &amp; Salomon</p>
+    <p class="body-text anim-child-3">se diront</p>
+    <p class="anim-child-3" style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-style:italic;color:var(--text)">"Oui"</p>
+    <div class="gold-divider anim-child-3"></div>
+    <p class="body-text anim-child-4">
+      <strong>Le Lundi 1<sup>er</sup> Février 2027<br>à 15h30</strong>
+      à la Mairie du 16<sup>e</sup> arrondissement<br>
+      71 Avenue Henri Martin,<br>75016 Paris
+    </p>
+    <div class="btn-row anim-child-5">
+      <a href="https://ul.waze.com/ul?place=Eig3MSBBdi4gSGVucmkgTWFydGluLCA3NTExNiBQYXJpcywgRnJhbmNlIjASLgoUChIJoaToQFZl5kcRcaLhraWHzicQRyoUChIJeYEVuVZl5kcRoBHhiKfPSgI&ll=48.86378840%2C2.27653600&navigate=yes" class="btn-primary" target="_blank">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Itinéraire Waze
+      </a>
+      <a href="mairie.ics" download class="btn-outline">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Ajouter au calendrier
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+<div class="photo-divider"><img src="photo2.jpeg" alt=""></div>
+
+<!-- ══ HOUPPA ══ -->
+<section class="section marble-bg" id="houppa">
+  <div class="pulse-wrap"><div class="pulse-ring"></div><div class="pulse-ring"></div><div class="pulse-ring"></div></div>
+  <div class="section-inner reveal">
+    <h2 class="section-title shimmer-title anim-child-1">La Houppa</h2>
+    <div class="gold-divider anim-child-2"></div>
+    <p class="hebrew-text anim-child-3">קוֹל שָׂשׂוֹן וְקוֹל שִׂמְחָה קוֹל חָתָן וְקוֹל כַּלָּה</p>
+    <div class="gold-divider anim-child-3"></div>
+    <div class="family-grid anim-child-3">
+      <p style="text-align:right">Famille Laloum &amp; Nizard</p>
+      <p style="text-align:left">Famille Braham &amp; Laloum</p>
+      <p class="family-full">ont la joie de vous faire part du mariage de leurs petits-enfants et enfants</p>
+    </div>
+    <div class="couple-names anim-child-4">
+      <div class="bride-name">
+        <span class="big-name">Salomé</span>
+        <span class="hebrew-name">שְׁלוֹמִית</span>
+      </div>
+      <span class="amp-symbol">&amp;</span>
+      <div class="groom-name">
+        <span class="big-name">Salomon</span>
+        <span class="hebrew-name">שְׁלֹמֹה</span>
+      </div>
+    </div>
+    <div class="gold-divider anim-child-4"></div>
+    <p class="body-text anim-child-4">et seraient honorés de votre présence à la cérémonie religieuse qui aura lieu</p>
+    <p class="body-text anim-child-5">
+      <strong>Le Dimanche 7 Février 2027<br>à 17h30</strong>
+      À l'InterContinental Opéra<br>
+      2 Rue Scribe,<br>75009 Paris
+    </p>
+    <p class="body-text anim-child-5" style="font-style:italic;font-size:0.95rem">La cérémonie sera suivie du buffet et de la soirée</p>
+    <p class="body-text anim-child-5" style="font-style:italic;font-size:0.88rem;color:var(--text-light)"><em>En ce jour si particulier nous avons une pensée émue et remplie de tendresse pour tous nos êtres chers qui ne sont plus parmi nous. Qu'ils nous protègent et bénissent notre union.</em></p>
+    <div class="btn-row anim-child-6">
+      <a href="https://maps.google.com/?q=InterContinental+Paris+Opera+2+Rue+Scribe+75009" class="btn-primary" target="_blank">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Itinéraire Google Maps
+      </a>
+      <a href="houppa.ics" download class="btn-outline">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Ajouter au calendrier
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="photo-divider"><img src="photo3.jpeg" alt=""></div>
+
+<!-- ══ CHABBAT HATAN ══ -->
+<section class="section marble-bg" id="shabbat">
+  <div class="pulse-wrap"><div class="pulse-ring"></div><div class="pulse-ring"></div><div class="pulse-ring"></div></div>
+  <div class="section-inner reveal">
+    <h2 class="section-title shimmer-title anim-child-1">Le Chabbat Hatan</h2>
+    <div class="gold-divider anim-child-2"></div>
+    <p class="hebrew-text anim-child-3">לְכָה דוֹדִי לִקְרַאת כַּלָּה פְּנֵי שַׁבָּת נְקַבְּלָה</p>
+    <div class="gold-divider anim-child-3"></div>
+    <p class="anim-child-3" style="font-family:'Great Vibes',cursive;font-size:1.6rem;color:var(--bx-dark)">Salomé &amp; Salomon</p>
+    <p class="body-text anim-child-3">vous accueilleront</p>
+    <div class="gold-divider anim-child-3"></div>
+    <p class="body-text anim-child-4">
+      <strong>Le Vendredi 12 Février 2027</strong>
+      &amp;<br>
+      <strong>Le Samedi 13 Février 2027</strong>
+    </p>
+    <p class="body-text anim-child-4">
+      À l'InterContinental Paris Avenue Marceau<br>
+      64 Avenue Marceau,<br>75008 Paris
+    </p>
+    <p class="body-text anim-child-4" style="font-style:italic;font-size:0.95rem">Les offices seront suivis d'un repas</p>
+    <div class="btn-row anim-child-5">
+      <a href="https://maps.google.com/?q=64+Avenue+Marceau+75008+Paris" class="btn-primary" target="_blank">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Itinéraire Google Maps
+      </a>
+      <a href="shabbat.ics" download class="btn-outline">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Ajouter au calendrier
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="photo-divider"><img src="photo4.jpeg" alt=""></div>
+
+<!-- ══ RÉPONSE ══ -->
+<section class="section form-section" id="reponse">
+  <div class="section-inner reveal">
+    <h2 class="section-title shimmer-title anim-child-1">Votre Réponse</h2>
+    <p class="anim-child-2" style="font-family:'Great Vibes',cursive;font-size:1.3rem;color:var(--bx)">Nous avons hâte de vous retrouver !</p>
+    <div class="gold-divider anim-child-2"></div>
+    <form class="form-wrapper anim-child-3" id="rsvp-form" onsubmit="submitForm(event)">
+      <input type="text" class="form-input" id="f-nom"    placeholder="Nom"    required>
+      <input type="text" class="form-input" id="f-prenom" placeholder="Prénom" required>
+      <div class="checkbox-group">
+        <div class="checkbox-item">
+          <label class="checkbox-label"><input type="checkbox" id="cb-mairie"> Oui à la Mairie</label>
+          <input type="number" class="form-input-sm" id="nb-mairie" placeholder="Nombre de personnes" min="1">
+        </div>
+        <div class="checkbox-item">
+          <label class="checkbox-label"><input type="checkbox" id="cb-after"> Oui à l'After Mairie</label>
+          <input type="number" class="form-input-sm" id="nb-after" placeholder="Nombre de personnes" min="1">
+        </div>
+        <div class="checkbox-item">
+          <label class="checkbox-label"><input type="checkbox" id="cb-houppa"> Oui à la Houppa &amp; Soirée</label>
+          <input type="number" class="form-input-sm" id="nb-houppa" placeholder="Nombre de personnes" min="1">
+        </div>
+        <div class="checkbox-item">
+          <label class="checkbox-label"><input type="checkbox" id="cb-shabbat"> Oui au Chabbat Hatan</label>
+          <input type="number" class="form-input-sm" id="nb-shabbat" placeholder="Nombre de personnes" min="1">
+        </div>
+      </div>
+      <textarea class="form-textarea" id="f-message" rows="3" placeholder="Message pour les mariés"></textarea>
+      <button type="submit" class="btn-primary" id="submit-btn" style="align-self:center;margin-top:8px">
+        <span id="submit-label">Répondre</span>
+      </button>
+    </form>
+    <div id="form-success" style="display:none;text-align:center;padding:20px;animation:fadeUp 0.7s ease both">
+      <p style="font-family:'Great Vibes',cursive;font-size:2rem;color:var(--bx-dark)">Merci !</p>
+      <p class="body-text">Votre réponse a bien été enregistrée. 🥂</p>
+    </div>
+    <div id="form-error" style="display:none;text-align:center;padding:12px;color:#b0392b;font-size:0.95rem">
+      Une erreur est survenue, merci de réessayer.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-names">Salomé &amp; Salomon</div>
+  <p class="footer-text">01 . 02 . 2027</p>
+</footer>
+
+<script>
+/* ── Compte à rebours ── */
+const target = new Date('2027-02-01T15:30:00+01:00');
+function updateCountdown() {
+  const diff = target - new Date();
+  if (diff <= 0) { ['cd','ch','cm','cs'].forEach(id => document.getElementById(id).textContent = '0'); return; }
+  document.getElementById('cd').textContent = Math.floor(diff / 86400000);
+  document.getElementById('ch').textContent = Math.floor((diff % 86400000) / 3600000);
+  document.getElementById('cm').textContent = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('cs').textContent = Math.floor((diff % 60000) / 1000);
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ── Musique ── */
+const music   = document.getElementById('bg-music');
+const audioBar = document.getElementById('audio-bar');
+const iconPlay  = document.getElementById('audio-icon-play');
+const iconPause = document.getElementById('audio-icon-pause');
+const audioLabel = document.getElementById('audio-label');
+
+function toggleMusic() {
+  if (music.paused) {
+    music.play();
+    iconPlay.style.display  = 'none';
+    iconPause.style.display = 'block';
+    audioLabel.textContent  = 'Pause';
+  } else {
+    music.pause();
+    iconPlay.style.display  = 'block';
+    iconPause.style.display = 'none';
+    audioLabel.textContent  = 'Musique';
+  }
+}
+
+/* ── Ouverture invitation ── */
+function openInvitation() {
+  document.getElementById('splash').classList.add('hidden');
+  document.getElementById('main-nav').style.display = 'flex';
+  window.scrollTo(0, 0);
+
+  // Lancer la musique (nécessite geste utilisateur — le clic sur le bouton suffit)
+  music.play().then(() => {
+    iconPlay.style.display  = 'none';
+    iconPause.style.display = 'block';
+    audioLabel.textContent  = 'Pause';
+  }).catch(() => { /* autoplay bloqué sur certains navigateurs, l'user peut cliquer la barre */ });
+
+  // Afficher la barre audio
+  audioBar.style.display = 'flex';
+}
+
+/* ── Scroll reveal ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── Google Sheets RSVP ──
+   Remplacer VOTRE_URL par l'URL de déploiement de votre Apps Script.
+
+   Code Apps Script (Extensions > Apps Script dans Google Sheets) :
+
+   function doPost(e) {
+     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+     if (sheet.getLastRow() === 0) {
+       sheet.appendRow(['Date','Nom','Prénom','Mairie (nb)','After (nb)','Houppa (nb)','Chabbat (nb)','Message']);
+     }
+     const d = JSON.parse(e.postData.contents);
+     sheet.appendRow([d.date||'', d.nom||'', d.prenom||'', d.mairie||'', d.after||'', d.houppa||'', d.shabbat||'', d.message||'']);
+     return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
+   }
+
+   Déployer > Nouvelle déploiement > Application Web
+   Exécuter en tant que : Moi  |  Accès : Tout le monde
+*/
+const GOOGLE_SHEET_URL = 'VOTRE_URL';
+
+async function submitForm(e) {
+  e.preventDefault();
+  const btn   = document.getElementById('submit-btn');
+  const label = document.getElementById('submit-label');
+  const errDiv  = document.getElementById('form-error');
+  const succDiv = document.getElementById('form-success');
+
+  label.innerHTML = '<span class="spinner"></span>';
+  btn.disabled = true;
+  errDiv.style.display = 'none';
+
+  const payload = {
+    nom:     document.getElementById('f-nom').value.trim(),
+    prenom:  document.getElementById('f-prenom').value.trim(),
+    mairie:  document.getElementById('cb-mairie').checked  ? (document.getElementById('nb-mairie').value  || '1') : '',
+    after:   document.getElementById('cb-after').checked   ? (document.getElementById('nb-after').value   || '1') : '',
+    houppa:  document.getElementById('cb-houppa').checked  ? (document.getElementById('nb-houppa').value  || '1') : '',
+    shabbat: document.getElementById('cb-shabbat').checked ? (document.getElementById('nb-shabbat').value || '1') : '',
+    message: document.getElementById('f-message').value.trim(),
+    date:    new Date().toLocaleString('fr-FR')
+  };
+
+  try {
+    await fetch(GOOGLE_SHEET_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    document.getElementById('rsvp-form').style.display = 'none';
+    succDiv.style.display = 'block';
+  } catch (err) {
+    label.textContent = 'Répondre';
+    btn.disabled = false;
+    errDiv.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>
